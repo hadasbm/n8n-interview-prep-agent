@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  n8n:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: n8n-python
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin123
+      - TZ=Asia/Jerusalem
+      - GENERIC_TIMEZONE=Asia/Jerusalem
+    volumes:
+      - ${USERPROFILE}/.n8n:/home/node/.n8n
+  resume-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.resume-api
+    container_name: resume-api
+    ports:
+      - "5001:5001"
