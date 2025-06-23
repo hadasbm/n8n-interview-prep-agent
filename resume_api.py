@@ -3,9 +3,14 @@ import base64
 from io import BytesIO
 from PyPDF2 import PdfReader
 from docx import Document
-import tempfile 
+import tempfile
+import os
 
 app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def home():
+    return "📋 Resume Agent API is up and running!", 200
 
 @app.route('/extract_resume', methods=['POST'])
 def extract_resume():
@@ -15,6 +20,7 @@ def extract_resume():
 
     resume_b64 = data['resume']
     mime_type = data.get('resumeMimeType', '')
+
     try:
         file_bytes = base64.b64decode(resume_b64)
     except Exception as e:
@@ -41,7 +47,7 @@ def extract_resume():
         "jobLink": data.get("jobLink"),
         "companyLink": data.get("companyLink"),
         "linkedinProfile": data.get("linkedinProfile"),
-        "resumeFileName": data.get("resumeFileName")  # אם נדרש בהמשך
+        "resumeFileName": data.get("resumeFileName")
     })
 
 @app.route('/generate_docx', methods=['POST'])
@@ -54,30 +60,30 @@ def generate_docx():
     
     try:
         doc = Document()
-
         heading = doc.add_heading('📋 Interview Preparation - Gemini AI', 0)
         heading.alignment = 2  # RTL alignment
-        
+
         cleaned_text = text.replace('***', '').replace('###', '').replace('**', '')
         
         for section in cleaned_text.split('\n\n'):
             if section.strip():
                 paragraph = doc.add_paragraph(section.strip())
-                paragraph.alignment = 2  # RTL alignment
+                paragraph.alignment = 2
                 for run in paragraph.runs:
                     run.font.name = 'Arial'
-                    
+        
         temp = tempfile.NamedTemporaryFile(delete=False, suffix=".docx")
         doc.save(temp.name)
-        
+
         return send_file(temp.name,
                          as_attachment=True,
                          download_name='Interview_Prep.docx',
                          mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-                         
+
     except Exception as e:
         return jsonify({"error": f"Failed to generate DOCX: {str(e)}"}), 500
 
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    # Render automatically injects PORT via environment variable
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
