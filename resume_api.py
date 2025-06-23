@@ -12,6 +12,10 @@ app = Flask(__name__)
 def home():
     return "📋 Resume Agent API is up and running!", 200
 
+@app.route('/healthz', methods=['GET'])
+def health_check():
+    return jsonify({"status": "ok"}), 200
+
 @app.route('/extract_resume', methods=['POST'])
 def extract_resume():
     data = request.json
@@ -61,7 +65,7 @@ def generate_docx():
     try:
         doc = Document()
         heading = doc.add_heading('📋 Interview Preparation - Gemini AI', 0)
-        heading.alignment = 2  # RTL alignment
+        heading.alignment = 2
 
         cleaned_text = text.replace('***', '').replace('###', '').replace('**', '')
         
@@ -84,6 +88,5 @@ def generate_docx():
         return jsonify({"error": f"Failed to generate DOCX: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    # Render automatically injects PORT via environment variable
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
