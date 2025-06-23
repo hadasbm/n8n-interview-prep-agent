@@ -7,7 +7,7 @@ with open(r"C:\Users\hagit\Downloads\Hadas_Ben_Moshe_CV.docx", 'rb') as file:
     file_content = file.read()
     encoded_file = base64.b64encode(file_content).decode('utf-8')
 
-url = "https://hadasbenmoshe.app.n8n.cloud/webhook-test/interview-prep"
+url = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep"
 data = {
     'email': email,
     'jobLink': 'https://jobs.akamai.com/en/sites/CX_1/job/621?keyword=devops&mode=location',
