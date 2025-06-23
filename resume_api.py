@@ -12,7 +12,7 @@ app = Flask(__name__)
 def home():
     return "📋 Resume Agent API is up and running!", 200
 
-@app.route('/healthz', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({"status": "ok"}), 200
 
