@@ -14,7 +14,7 @@ import re
 app = Flask(__name__)
 
 def set_rtl_paragraph(paragraph):
-    """הגדרת כיווניות מימין לשמאל לפסקה - גישה פשוטה יותר"""
+    """הגדרת כיווניות מימין לשמאל לפסקה"""
     try:
         # הגדרת RTL ברמת הפסקה
         pPr = paragraph._element.get_or_add_pPr()
@@ -30,8 +30,6 @@ def set_rtl_paragraph(paragraph):
         
     except Exception as e:
         print(f"RTL error: {e}")
-
-# פונקציות עזר מוסרות - לא נדרשות יותר
 
 @app.route('/', methods=['GET'])
 def home():
