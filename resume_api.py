@@ -1,146 +1,118 @@
 from flask import Flask, request, jsonify, send_file  
+import base64
+from io import BytesIO
+from PyPDF2 import PdfReader
 from docx import Document
 from docx.shared import Pt, RGBColor
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.style import WD_STYLE_TYPE
 import tempfile
-import re
 import os
+import re
 
 app = Flask(__name__)
 
 def set_rtl_paragraph(paragraph):
     """הגדרת כיווניות מימין לשמאל לפסקה"""
-    pPr = paragraph._element.get_or_add_pPr()
-    bidi = OxmlElement('w:bidi')
-    bidi.set(qn('w:val'), '1')
-    pPr.append(bidi)
+    try:
+        pPr = paragraph._element.get_or_add_pPr()
+        bidi = OxmlElement('w:bidi')
+        bidi.set(qn('w:val'), '1')
+        pPr.append(bidi)
+    except:
+        pass
 
 def is_hebrew_text(text):
     """בדיקה אם הטקסט מכיל עברית"""
     hebrew_chars = re.findall(r'[\u0590-\u05FF]', text)
-    return len(hebrew_chars) > 0
+    return len(hebrew_chars) > len(text) * 0.1  # אם יותר מ-10% עברית
 
-def add_styled_paragraph(doc, text, style_type='normal'):
-    """הוספת פסקה עם עיצוב מתאים"""
-    para = doc.add_paragraph()
-    
-    # הגדרת עיצוב לפי סוג
-    if style_type == 'heading':
-        run = para.add_run(text)
-        run.font.size = Pt(14)
-        run.font.bold = True
-        run.font.color.rgb = RGBColor(0, 51, 102)  # כחול כהה
-    elif style_type == 'subheading':
-        run = para.add_run(text)
-        run.font.size = Pt(12)
-        run.font.bold = True
-        run.font.color.rgb = RGBColor(51, 51, 51)  # אפור כהה
-    else:
-        run = para.add_run(text)
-        run.font.size = Pt(11)
-    
-    # הגדרת גופן
-    run.font.name = 'Calibri'
-    r = run._element
-    r.rPr.rFonts.set(qn('w:eastAsia'), 'Arial')
-    
-    # הגדרת כיווניות
-    if is_hebrew_text(text):
-        para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        set_rtl_paragraph(para)
-    else:
-        para.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    
-    return para
-
-def parse_markdown_to_docx(doc, text):
-    """המרת טקסט מעוצב לפורמט Word"""
+def format_text_for_word(doc, text):
+    """עיצוב טקסט עם זיהוי כותרות ורשימות"""
     lines = text.split('\n')
-    current_list_items = []
     
     for line in lines:
         line = line.strip()
         if not line:
-            # אם יש רשימה פתוחה, סגור אותה
-            if current_list_items:
-                add_list_to_doc(doc, current_list_items)
-                current_list_items = []
             continue
-        
-        # זיהוי כותרות
-        if line.startswith('###'):
-            if current_list_items:
-                add_list_to_doc(doc, current_list_items)
-                current_list_items = []
-            clean_text = line.replace('###', '').strip()
-            add_styled_paragraph(doc, clean_text, 'heading')
             
-        elif line.startswith('##'):
-            if current_list_items:
-                add_list_to_doc(doc, current_list_items)
-                current_list_items = []
-            clean_text = line.replace('##', '').strip()
-            add_styled_paragraph(doc, clean_text, 'subheading')
+        # זיהוי כותרות (מתחיל במספר ונקודה או מילים מסוימות)
+        is_heading = False
+        if re.match(r'^\d+\.', line) and len(line.split()) <= 15:  # כותרת מספרית קצרה
+            is_heading = True
+        elif any(keyword in line for keyword in ['ניתוח', 'התאמה', 'החברה', 'שאלות טכניות', 'שאלות למראיין', 'משפטי מפתח']):
+            is_heading = True
             
-        # זיהוי רשימות ממוספרות
-        elif re.match(r'^\d+\.', line):
-            current_list_items.append(('numbered', line))
-            
-        # זיהוי רשימות עם נקודות
-        elif line.startswith('- ') or line.startswith('• '):
-            current_list_items.append(('bullet', line))
-            
-        # טקסט רגיל
+        # יצירת פסקה
+        if is_heading:
+            paragraph = doc.add_paragraph()
+            run = paragraph.add_run(line)
+            run.font.bold = True
+            run.font.size = Pt(13)
+            run.font.color.rgb = RGBColor(0, 51, 102)  # כחול כהה
         else:
-            if current_list_items:
-                add_list_to_doc(doc, current_list_items)
-                current_list_items = []
-            
-            # ניקוי תווים מיוחדים
-            clean_text = (line.replace('**', '')
-                            .replace('***', '')
-                            .replace('__', '')
-                            .replace('```', '')
-                            .replace('\u200E', ''))
-            
-            if clean_text:
-                add_styled_paragraph(doc, clean_text)
-    
-    # סגירת רשימה אחרונה אם קיימת
-    if current_list_items:
-        add_list_to_doc(doc, current_list_items)
+            paragraph = doc.add_paragraph(line)
+            for run in paragraph.runs:
+                run.font.size = Pt(11)
+        
+        # הגדרת גופן וכיווניות
+        for run in paragraph.runs:
+            run.font.name = 'Calibri'
+            run._element.rPr.rFonts.set(qn('w:eastAsia'), 'Arial')
+        
+        # הגדרת כיווניות לפי השפה
+        if is_hebrew_text(line):
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            set_rtl_paragraph(paragraph)
+        else:
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        
+        # הוספת ריווח אחרי כותרות
+        if is_heading:
+            doc.add_paragraph()
 
-def add_list_to_doc(doc, list_items):
-    """הוספת רשימה למסמך"""
-    for item_type, item_text in list_items:
-        # ניקוי הטקסט
-        if item_type == 'numbered':
-            clean_text = re.sub(r'^\d+\.\s*', '', item_text)
+@app.route('/', methods=['GET'])
+def home():
+    return "📋 Resume Agent API is up and running!", 200
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "ok"}), 200
+
+@app.route('/extract_resume', methods=['POST'])
+def extract_resume():
+    data = request.json
+    if not data or 'resume' not in data:
+        return jsonify({"error": "Missing resume field"}), 400
+    resume_b64 = data['resume']
+    mime_type = data.get('resumeMimeType', '')
+    try:
+        file_bytes = base64.b64decode(resume_b64)
+    except Exception as e:
+        return jsonify({"error": f"Invalid base64: {str(e)}"}), 400
+    try:
+        if mime_type == "application/pdf":
+            reader = PdfReader(BytesIO(file_bytes))
+            text = "\n".join([page.extract_text() or "" for page in reader.pages])
+        elif mime_type in [
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/msword"
+        ]:
+            doc = Document(BytesIO(file_bytes))
+            text = "\n".join([para.text for para in doc.paragraphs])
         else:
-            clean_text = item_text.replace('- ', '').replace('• ', '')
-        
-        # יצירת פסקה עם רשימה
-        para = doc.add_paragraph()
-        
-        # הוספת מספור או נקודה
-        if item_type == 'numbered':
-            para.style = 'List Number'
-        else:
-            para.style = 'List Bullet'
-        
-        run = para.add_run(clean_text)
-        run.font.name = 'Calibri'
-        run.font.size = Pt(11)
-        
-        # הגדרת כיווניות
-        if is_hebrew_text(clean_text):
-            para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-            set_rtl_paragraph(para)
-        else:
-            para.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            return jsonify({"error": f"Unsupported MIME type: {mime_type}"}), 415
+    except Exception as e:
+        return jsonify({"error": f"Error reading file: {str(e)}"}), 500
+    return jsonify({
+        "resumeText": text,
+        "length": len(text),
+        "jobLink": data.get("jobLink"),
+        "companyLink": data.get("companyLink"),
+        "linkedinProfile": data.get("linkedinProfile"),
+        "resumeFileName": data.get("resumeFileName")
+    })
 
 @app.route('/generate_docx', methods=['POST'])
 def generate_docx():
@@ -153,16 +125,25 @@ def generate_docx():
     try:
         doc = Document()
         
-        # הגדרת כותרת ראשית
+        # כותרת ראשית
         title = doc.add_heading('📋 הכנה לראיון עבודה - Gemini AI', 0)
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        set_rtl_paragraph(title)
+        for run in title.runs:
+            run.font.name = 'Calibri'
+            run.font.color.rgb = RGBColor(0, 51, 102)
         
-        # הוספת קו מפריד
-        doc.add_paragraph('_' * 50).alignment = WD_ALIGN_PARAGRAPH.CENTER
+        # קו מפריד
+        separator = doc.add_paragraph('═' * 60)
+        separator.alignment = WD_ALIGN_PARAGRAPH.CENTER
         
-        # עיבוד הטקסט
-        parse_markdown_to_docx(doc, text)
+        # ניקוי בסיסי של תווים לא רצויים
+        cleaned_text = (text.replace('***', '')
+                           .replace('```', '')
+                           .replace('\r', '')
+                           .replace('\u200E', ''))
+        
+        # עיצוב הטקסט
+        format_text_for_word(doc, cleaned_text)
         
         # יצירת קובץ זמני
         temp = tempfile.NamedTemporaryFile(delete=False, suffix=".docx")
@@ -172,7 +153,7 @@ def generate_docx():
                          as_attachment=True,
                          download_name='Interview_Preparation.docx',
                          mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        
+                         
     except Exception as e:
         return jsonify({"error": f"Failed to generate DOCX: {str(e)}"}), 500
 
