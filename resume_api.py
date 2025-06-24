@@ -108,7 +108,7 @@ def generate_docx():
                            .replace('\r', '')
                            .replace('\u200E', ''))
         
-        # חלוקה לפסקאות ועיצוב פשוט
+        # חלוקה לפסקאות ועיצוב עם זיהוי כותרות
         sections = cleaned_text.split('\n\n')
         for section in sections:
             if section.strip():
@@ -116,13 +116,29 @@ def generate_docx():
                 for line in lines:
                     line = line.strip()
                     if line:
-                        paragraph = doc.add_paragraph(line)
+                        # הסרת מספרים מתחילת השורה
+                        clean_line = re.sub(r'^\d+\.\s*', '', line)
+                        
+                        # זיהוי כותרות לפי מילות מפתח או אורך קצר
+                        is_heading = False
+                        keywords = ['ניתוח', 'התאמה', 'החברה', 'שאלות', 'משפטי מפתח', 'אקאמאי', 'קורות החיים']
+                        if any(keyword in clean_line for keyword in keywords) and len(clean_line.split()) <= 10:
+                            is_heading = True
+                        
+                        paragraph = doc.add_paragraph()
+                        run = paragraph.add_run(clean_line)
+                        
+                        # עיצוב כותרות או טקסט רגיל
+                        if is_heading:
+                            run.font.bold = True
+                            run.font.size = Pt(13)
+                            run.font.color.rgb = RGBColor(0, 51, 102)  # כחול כהה
+                        else:
+                            run.font.size = Pt(11)
                         
                         # הגדרת גופן
-                        for run in paragraph.runs:
-                            run.font.name = 'Calibri'
-                            run.font.size = Pt(11)
-                            run._element.rPr.rFonts.set(qn('w:eastAsia'), 'Arial')
+                        run.font.name = 'Calibri'
+                        run._element.rPr.rFonts.set(qn('w:eastAsia'), 'Arial')
                         
                         # הגדרת כיווניות - הכל לימין
                         paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
