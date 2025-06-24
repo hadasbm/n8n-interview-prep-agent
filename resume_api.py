@@ -14,22 +14,22 @@ import re
 app = Flask(__name__)
 
 def set_rtl_paragraph(paragraph):
-    """הגדרת כיווניות מימין לשמאל לפסקה"""
+    """הגדרת כיווניות מימין לשמאל לפסקה - גישה פשוטה יותר"""
     try:
+        # הגדרת RTL ברמת הפסקה
         pPr = paragraph._element.get_or_add_pPr()
+        
+        # יצירת אלמנט bidi (bidirectional text)
         bidi = OxmlElement('w:bidi')
-        bidi.set(qn('w:val'), '1')
         pPr.append(bidi)
         
-        # הגדרת כיווניות לכל הרצים בפסקה
-        for run in paragraph.runs:
-            rPr = run._element.get_or_add_rPr()
-            rtl = OxmlElement('w:rtl')
-            rtl.set(qn('w:val'), '1')
-            rPr.append(rtl)
+        # הגדרת כיוון הטקסט
+        jc = OxmlElement('w:jc')
+        jc.set(qn('w:val'), 'right')
+        pPr.append(jc)
+        
     except Exception as e:
         print(f"RTL error: {e}")
-        pass
 
 # פונקציות עזר מוסרות - לא נדרשות יותר
 
@@ -122,28 +122,35 @@ def generate_docx():
                         # הסרת מספרים מתחילת השורה
                         clean_line = re.sub(r'^\d+\.\s*', '', line)
                         
-                        # זיהוי כותרות פשוט יותר
+                        # זיהוי כותרות משופר
                         is_heading = False
+                        heading_keywords = ['ניתוח', 'התאמה', 'החברה', 'שאלות', 'משפטי מפתח', 'Akamai', 'קורות החיים']
+                        
+                        # בדיקה אם זה כותרת (קצר ומכיל מילת מפתח)
                         if (len(clean_line.split()) <= 8 and 
-                            any(keyword in clean_line for keyword in 
-                                ['ניתוח', 'התאמה', 'החברה', 'שאלות', 'משפטי מפתח', 'Akamai'])):
+                            any(keyword in clean_line for keyword in heading_keywords)):
+                            is_heading = True
+                        
+                        # בדיקה נוספת לכותרות שמתחילות בביטויים מסוימים
+                        if any(clean_line.startswith(prefix) for prefix in ['ניתוח', 'התאמה', 'שאלות', 'משפטי']):
                             is_heading = True
                         
                         paragraph = doc.add_paragraph()
                         run = paragraph.add_run(clean_line)
                         
-                        # עיצוב
+                        # עיצוב מובדל לכותרות וטקסט רגיל
                         if is_heading:
                             run.font.bold = True
-                            run.font.size = Pt(13)
-                            run.font.color.rgb = RGBColor(0, 51, 102)
+                            run.font.size = Pt(15)  # גדול יותר לכותרות
+                            run.font.color.rgb = RGBColor(0, 51, 102)  # כחול כהה
                         else:
-                            run.font.size = Pt(11)
+                            run.font.bold = False
+                            run.font.size = Pt(11)  # טקסט רגיל
                         
                         # גופן אחיד
                         run.font.name = 'Calibri'
                         
-                        # הכל לימין עם RTL חזק
+                        # הגדרת יישור לימין וRTL
                         paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
                         set_rtl_paragraph(paragraph)
         
