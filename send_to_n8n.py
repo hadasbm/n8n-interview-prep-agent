@@ -1,21 +1,21 @@
 import requests
 import base64
 
-email = "hadas414@gmail.com"
+email = "<YOUR-EMAIL>"
 
-with open(r"C:\Users\hagit\Downloads\Hadas_Ben_Moshe_CV.docx", 'rb') as file:
+with open(r"<YOUR-PATH-TO-CV>", 'rb') as file:
     file_content = file.read()
     encoded_file = base64.b64encode(file_content).decode('utf-8')
 
-url = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep"
+url = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep" #dont change!
 data = {
     'email': email,
-    'jobLink': 'https://jobs.akamai.com/en/sites/CX_1/job/621?keyword=devops&mode=location',
-    'companyLink': 'https://www.akamai.com/company',
-    'linkedinProfile': 'https://www.linkedin.com/in/hadas-ben-moshe',
+    'jobLink': '<PATH-TO-JOB>',
+    'companyLink': '<PATH-TO-COMPANY>',
+    'linkedinProfile': '<PATH-TO-LINKEDIN-PROFILE>',
     'resume': encoded_file,
-    'resumeFilename': 'Hadas_Ben_Moshe_CV.docx',
-    'resumeMimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    'resumeFilename': '<CV-FILE-NAME>', #(optional)
+    'resumeMimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  #for PDF use: application/pdf
 }
 
 response = requests.post(url, json=data)
