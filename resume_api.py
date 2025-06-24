@@ -20,13 +20,16 @@ def set_rtl_paragraph(paragraph):
         bidi = OxmlElement('w:bidi')
         bidi.set(qn('w:val'), '1')
         pPr.append(bidi)
-    except:
+        
+        # הגדרת כיווניות לכל הרצים בפסקה
+        for run in paragraph.runs:
+            rPr = run._element.get_or_add_rPr()
+            rtl = OxmlElement('w:rtl')
+            rtl.set(qn('w:val'), '1')
+            rPr.append(rtl)
+    except Exception as e:
+        print(f"RTL error: {e}")
         pass
-
-def is_hebrew_text(text):
-    """בדיקה אם הטקסט מכיל עברית"""
-    hebrew_chars = re.findall(r'[\u0590-\u05FF]', text)
-    return len(hebrew_chars) > len(text) * 0.1  # אם יותר מ-10% עברית
 
 # פונקציות עזר מוסרות - לא נדרשות יותר
 
@@ -108,7 +111,7 @@ def generate_docx():
                            .replace('\r', '')
                            .replace('\u200E', ''))
         
-        # חלוקה לפסקאות ועיצוב עם זיהוי כותרות
+        # חלוקה לפסקאות ועיצוב פשוט וברור
         sections = cleaned_text.split('\n\n')
         for section in sections:
             if section.strip():
@@ -119,28 +122,28 @@ def generate_docx():
                         # הסרת מספרים מתחילת השורה
                         clean_line = re.sub(r'^\d+\.\s*', '', line)
                         
-                        # זיהוי כותרות לפי מילות מפתח או אורך קצר
+                        # זיהוי כותרות פשוט יותר
                         is_heading = False
-                        keywords = ['ניתוח', 'התאמה', 'החברה', 'שאלות', 'משפטי מפתח', 'אקאמאי', 'קורות החיים']
-                        if any(keyword in clean_line for keyword in keywords) and len(clean_line.split()) <= 10:
+                        if (len(clean_line.split()) <= 8 and 
+                            any(keyword in clean_line for keyword in 
+                                ['ניתוח', 'התאמה', 'החברה', 'שאלות', 'משפטי מפתח', 'Akamai'])):
                             is_heading = True
                         
                         paragraph = doc.add_paragraph()
                         run = paragraph.add_run(clean_line)
                         
-                        # עיצוב כותרות או טקסט רגיל
+                        # עיצוב
                         if is_heading:
                             run.font.bold = True
                             run.font.size = Pt(13)
-                            run.font.color.rgb = RGBColor(0, 51, 102)  # כחול כהה
+                            run.font.color.rgb = RGBColor(0, 51, 102)
                         else:
                             run.font.size = Pt(11)
                         
-                        # הגדרת גופן
+                        # גופן אחיד
                         run.font.name = 'Calibri'
-                        run._element.rPr.rFonts.set(qn('w:eastAsia'), 'Arial')
                         
-                        # הגדרת כיווניות - הכל לימין
+                        # הכל לימין עם RTL חזק
                         paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
                         set_rtl_paragraph(paragraph)
         
