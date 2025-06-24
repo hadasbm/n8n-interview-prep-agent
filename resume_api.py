@@ -28,49 +28,7 @@ def is_hebrew_text(text):
     hebrew_chars = re.findall(r'[\u0590-\u05FF]', text)
     return len(hebrew_chars) > len(text) * 0.1  # אם יותר מ-10% עברית
 
-def format_text_for_word(doc, text):
-    """עיצוב טקסט עם זיהוי כותרות ורשימות"""
-    lines = text.split('\n')
-    
-    for line in lines:
-        line = line.strip()
-        if not line:
-            continue
-            
-        # זיהוי כותרות (מתחיל במספר ונקודה או מילים מסוימות)
-        is_heading = False
-        if re.match(r'^\d+\.', line) and len(line.split()) <= 15:  # כותרת מספרית קצרה
-            is_heading = True
-        elif any(keyword in line for keyword in ['ניתוח', 'התאמה', 'החברה', 'שאלות טכניות', 'שאלות למראיין', 'משפטי מפתח']):
-            is_heading = True
-            
-        # יצירת פסקה
-        if is_heading:
-            paragraph = doc.add_paragraph()
-            run = paragraph.add_run(line)
-            run.font.bold = True
-            run.font.size = Pt(13)
-            run.font.color.rgb = RGBColor(0, 51, 102)  # כחול כהה
-        else:
-            paragraph = doc.add_paragraph(line)
-            for run in paragraph.runs:
-                run.font.size = Pt(11)
-        
-        # הגדרת גופן וכיווניות
-        for run in paragraph.runs:
-            run.font.name = 'Calibri'
-            run._element.rPr.rFonts.set(qn('w:eastAsia'), 'Arial')
-        
-        # הגדרת כיווניות לפי השפה
-        if is_hebrew_text(line):
-            paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-            set_rtl_paragraph(paragraph)
-        else:
-            paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        
-        # הוספת ריווח אחרי כותרות
-        if is_heading:
-            doc.add_paragraph()
+# פונקציות עזר מוסרות - לא נדרשות יותר
 
 @app.route('/', methods=['GET'])
 def home():
@@ -126,7 +84,7 @@ def generate_docx():
         doc = Document()
         
         # כותרת ראשית
-        title = doc.add_heading('📋 הכנה לראיון עבודה - Gemini AI', 0)
+        title = doc.add_heading('📋 Interview Preparation - Gemini AI', 0)
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
         for run in title.runs:
             run.font.name = 'Calibri'
@@ -136,14 +94,39 @@ def generate_docx():
         separator = doc.add_paragraph('═' * 60)
         separator.alignment = WD_ALIGN_PARAGRAPH.CENTER
         
-        # ניקוי בסיסי של תווים לא רצויים
+        # ניקוי יסודי של תווים לא רצויים
         cleaned_text = (text.replace('***', '')
+                           .replace('**', '')
+                           .replace('###', '')
+                           .replace('##', '')
+                           .replace('#', '')
                            .replace('```', '')
+                           .replace('__', '')
+                           .replace('*', '')
+                           .replace('---', '')
+                           .replace('–', '-')
                            .replace('\r', '')
                            .replace('\u200E', ''))
         
-        # עיצוב הטקסט
-        format_text_for_word(doc, cleaned_text)
+        # חלוקה לפסקאות ועיצוב פשוט
+        sections = cleaned_text.split('\n\n')
+        for section in sections:
+            if section.strip():
+                lines = section.strip().split('\n')
+                for line in lines:
+                    line = line.strip()
+                    if line:
+                        paragraph = doc.add_paragraph(line)
+                        
+                        # הגדרת גופן
+                        for run in paragraph.runs:
+                            run.font.name = 'Calibri'
+                            run.font.size = Pt(11)
+                            run._element.rPr.rFonts.set(qn('w:eastAsia'), 'Arial')
+                        
+                        # הגדרת כיווניות - הכל לימין
+                        paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+                        set_rtl_paragraph(paragraph)
         
         # יצירת קובץ זמני
         temp = tempfile.NamedTemporaryFile(delete=False, suffix=".docx")
