@@ -6,222 +6,151 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 - 📄 **Resume Analysis**: Extract and analyze text from PDF/DOCX files
 - 🤖 **AI-Powered Insights**: Generate detailed feedback using Gemini AI
-- 📝 **Interview Questions**: Create 15 technical interview questions with answers
+- 📝 **Interview Questions**: Create 5-7 technical interview questions with answers
 - 💼 **Job Matching**: Analyze resume compatibility with job descriptions
 - 📧 **Email Delivery**: Automatically send results via email
-- 📋 **Word Document**: Export everything to a formatted DOCX file
+- 📎 **Downloadable**: DOCX + HTML attachments
+
+## ✨ Features
+🧠 AI-powered resume analysis using Gemini
+📝 Tailored interview questions (15+)
+🔍 Job-to-resume matching & insights
+📧 Output sent via email (DOCX + HTML)
+✅ Just provide your resume + job info – the agent does the rest!
+
 
 ## 🏗️ Architecture
-
 - **n8n**: Workflow automation platform
 - **Flask API**: Resume processing and document generation
 - **Gemini AI**: Content analysis and generation
 - **Docker**: Containerized deployment
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Docker & Docker Compose
+## 🚀 How to Use (Cloud Version – Recommended)
+## Prerequisites
 - Python 3.9+
-- Gemini API key
 
-### Installation
+1. 📥 Clone This Repository
+git clone https://github.com/your-username/interview-prep-agent
+cd interview-prep-agent
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/interview-prep-agent
-   cd interview-prep-agent
-   ```
+2. ✏️ Edit the Python Client Script
+Open send_to_n8n.py and update the placeholders:
 
-2. **Configure the webhook URL**
-   
-   Edit `send_to_n8n.py` and update the webhook URL:
-   ```python
-   WEBHOOK_URL = "http://localhost:5678/webhook/YOUR-WEBHOOK-ID"  # Replace with your webhook
-   ```
+email = "your@email.com"
+with open(r"<PATH-TO-YOUR-RESUME>", 'rb') as file:
+    ...
+data = {
+    'email': email,
+    'jobLink': '<URL to job posting>',
+    'companyLink': '<URL to company site>',
+    'linkedinProfile': '<LinkedIn profile URL>',
+    'resume': encoded_file,
+    'resumeFilename': 'MyResume.docx',
+    'resumeMimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+}
+headers = {
+    'x-token': 'YOUR-TOKEN-HERE'
+}
 
-3. **Start the services**
-   ```bash
-   docker compose build
-   docker compose up -d
-   ```
+3. ▶️ Run the Script
+python den_to_n8n.py
 
-4. **Import the n8n workflow**
-   - Open n8n at `http://localhost:5678`
-   - Import the `workflow.json` file
-   - Configure your Gemini API key and email credentials
+Once submitted, you'll receive an email with full analysis + attachments.
 
-5. **Run the automation**
-   ```bash
-   python send_to_n8n.py
-   ```
-
-### Stopping the services
-```bash
-docker compose down
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create a `.env` file with the following variables:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-N8N_WEBHOOK_URL=http://localhost:5678/webhook/your-webhook-id
-SMTP_HOST=smtp.gmail.com
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-```
-
-### Email Setup
-
-1. **Gmail**: Use an App Password (not your regular password)
-2. **Other providers**: Update SMTP settings in the n8n workflow
-
-### API Endpoints
-
-The Flask API provides these endpoints:
-
-- `POST /extract_resume`: Extract text from PDF/DOCX files
-- `POST /generate_docx`: Generate Word documents from text
+## 🔒 Security
+This agent uses a Webhook with Token Authentication to secure access:
+Your requests must include a valid x-token header
+Token should be private and never exposed in client UI/code
+Only the creator knows the token
+If the token is invalid or missing, the request will be rejected.
 
 ## 📋 Usage
-
 ### Input Requirements
-
 - **Resume file**: PDF or DOCX format
-- **Job link** (optional): URL to job posting
+- **Email address**: to receive results
+- **Job link**: URL to job posting
 - **Company link** (optional): Company website
 - **LinkedIn profile** (optional): Your LinkedIn URL
 
-### Sample Request
-
-The `send_to_n8n.py` script handles the file upload and processing:
-
-```python
-python send_to_n8n.py
-```
-
-Follow the prompts to:
-1. Select your resume file
-2. Enter job details (optional)
-3. Provide email address for results
-
 ### Output
-
 You'll receive an email with:
 - 📊 Detailed resume analysis
 - 💡 Improvement recommendations  
-- ❓ 15 technical interview questions with answers
+- ❓ 5-7 technical interview questions with answers
 - 🎯 Job matching insights (if job link provided)
 - 📎 Complete analysis as a Word document attachment
+- 📄 HTML analysis of the resume and job
+- 🧩 Categorized insights (skills, tools, company match)
 
-## 🐳 Docker Services
+## 🧪 Sample Request Structure
 
-### Services Overview
+{
+  "email": "you@example.com",
+  "jobLink": "https://company.com/jobs/123",
+  "companyLink": "https://company.com",
+  "linkedinProfile": "https://linkedin.com/in/yourprofile",
+  "resume": "<base64-encoded file>",
+  "resumeFilename": "your_cv.docx",
+  "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+}
 
-- **n8n**: Workflow automation (`localhost:5678`)
-- **resume-api**: Flask API for file processing (`localhost:5001`)
 
-### Container Management
-
-```bash
-# Build and start
-docker compose build
-docker compose up -d
-
-# View logs
-docker compose logs -f
-
-# Restart specific service
-docker compose restart resume-api
-
-# Stop all services
-docker compose down
-```
 
 ## 🛠️ Development
-
-### Project Structure
+### 🔄 Project Structure
 
 ```
 interview-prep-automation/
 ├── README.md
-├── docker-compose.yml
 ├── Dockerfile                    # n8n container
 ├── Dockerfile.resume-api        # Flask API container
-├── send_to_n8n.py              # Client script
-├── app.py                       # Flask application
-├── workflow.json                # n8n workflow export
+├── send_to_n8n.py              # Client script (edit + run)
+├── resume_api.py                       # Flask API for resume handling (pre-hosted)
 ├── requirements.txt             # Python dependencies
-└── .env.example                 # Environment template
+└── (Optional) local/           # Local-only files (e.g. docker-compose.yml)
 ```
 
-### Local Development
 
-1. **Run Flask API locally**:
-   ```bash
-   pip install -r requirements.txt
-   python app.py
-   ```
+## 🌐 Service Overview
+Service	Description	Hosted At
+🧠 Gemini AI	Resume analysis & content gen.	Google Gemini API
+🧰 Flask API	Extract text, generate DOCX	Render (hidden – managed by maintainer)
+🔗 Webhook	Trigger via n8n + validate	https://hadasbenmoshe.app.n8n.cloud/...
 
-2. **Access n8n**: `http://localhost:5678`
-3. **API docs**: Flask API runs on `http://localhost:5001`
+
+## ⚙️ API Endpoints (For Reference)
+The Flask API provides these endpoints:
+You don't need to host these – already deployed.
+- 'POST /extract_resume': Extracts text from uploaded resume
+- 'POST /generate_docx': Generates a formatted Word document
+
 
 ## 🔍 Troubleshooting
-
 ### Common Issues
-
 **1. Webhook not working**
 - Check the webhook URL in `send_to_n8n.py`
 - Ensure n8n workflow is activated
 - Verify webhook ID matches
 
-**2. Email not sending**
-- Check SMTP credentials
-- Use App Passwords for Gmail
-- Verify email configuration in n8n
-
-**3. File processing errors**
+**2. File processing errors**
 - Ensure resume is in PDF or DOCX format
 - Check file size limits
 - Verify file is not corrupted
 
-**4. Docker issues**
-- Check if ports 5678 and 5001 are available
-- Run `docker compose logs` to see error details
-- Restart with `docker compose down && docker compose up -d`
 
-### Logs
+## 📣 Want to Share?
+After running successfully, feel free to share your results or write your own post! This agent is especially helpful for:
+🎯 Career changers
+📈 Tech professionals prepping for interviews
+🧪 Analyzing job fit based on actual roles
 
-```bash
-# View all logs
-docker compose logs
-
-# View specific service logs
-docker compose logs resume-api
-docker compose logs n8n
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit changes: `git commit -am 'Add feature'`
-4. Push to branch: `git push origin feature-name`
-5. Submit a Pull Request
 
 ## 📄 License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
-
 - [n8n](https://n8n.io/) for workflow automation
 - [Google Gemini](https://ai.google.dev/) for AI capabilities
 - [python-docx](https://python-docx.readthedocs.io/) for document generation
 
-**Made with ❤️ for job seekers everywhere**
+**Made with ❤️ to help you shine in your next interview**
