@@ -14,20 +14,28 @@ import re
 app = Flask(__name__)
 
 def set_rtl_paragraph(paragraph):
-    """הגדרת כיווניות מימין לשמאל לפסקה"""
+    """הגדרת כיווניות מימין לשמאל לפסקה - גישה פשוטה"""
     try:
-        # הגדרת RTL ברמת הפסקה
+        # הגדרת יישור לימין
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        
+        # הוספת הגדרות XML ישירות
         pPr = paragraph._element.get_or_add_pPr()
         
-        # יצירת אלמנט bidi (bidirectional text)
-        bidi = OxmlElement('w:bidi')
-        pPr.append(bidi)
+        # bidi - טקסט דו-כיווני
+        if pPr.find(qn('w:bidi')) is None:
+            bidi = OxmlElement('w:bidi')
+            bidi.set(qn('w:val'), '1')
+            pPr.append(bidi)
         
-        # הגדרת כיוון הטקסט
-        jc = OxmlElement('w:jc')
-        jc.set(qn('w:val'), 'right')
-        pPr.append(jc)
-        
+        # הגדרת כיוון RTL לכל הרצים
+        for run in paragraph.runs:
+            rPr = run._element.get_or_add_rPr()
+            if rPr.find(qn('w:rtl')) is None:
+                rtl = OxmlElement('w:rtl')
+                rtl.set(qn('w:val'), '1')
+                rPr.append(rtl)
+                
     except Exception as e:
         print(f"RTL error: {e}")
 
@@ -122,7 +130,7 @@ def generate_docx():
                         
                         # זיהוי כותרות משופר
                         is_heading = False
-                        heading_keywords = ['ניתוח', 'התאמה', 'החברה', 'שאלות', 'משפטי מפתח', 'קורות החיים',  'שפות תכנות', 'טכנולוגיות', 'מיומנויות', 'סיכום']
+                        heading_keywords = ['ניתוח', 'התאמה', 'החברה', 'שאלות', 'משפטי מפתח', 'Akamai', 'קורות החיים']
                         
                         # בדיקה אם זה כותרת (קצר ומכיל מילת מפתח)
                         if (len(clean_line.split()) <= 8 and 
@@ -145,11 +153,13 @@ def generate_docx():
                             run.font.bold = False
                             run.font.size = Pt(11)  # טקסט רגיל
                         
-                        # גופן אחיד
+                        # גופן אחיד עם תמיכה בעברית ואנגלית
                         run.font.name = 'Calibri'
                         
-                        # הגדרת יישור לימין וRTL
+                        # יישור לימין רק ברמת הפסקה
                         paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+                        
+                        # הפעלת RTL רק אחרי שהפסקה מוכנה
                         set_rtl_paragraph(paragraph)
         
         # יצירת קובץ זמני
