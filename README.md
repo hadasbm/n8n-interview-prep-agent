@@ -1,51 +1,49 @@
 ---
 
-🎯 Interview Prep Automation
+# 🎯 Interview Prep Automation
 
 An intelligent automation system that analyzes resumes and generates comprehensive interview preparation documents using AI.
 
 
 ---
 
-✨ Features
+## ✨ Features
 
-📄 Resume Analysis: Extract and analyze text from PDF/DOCX files
+- 📄 **Resume Analysis**: Extract and analyze text from PDF/DOCX files
 
-🤖 AI-Powered Insights: Generate detailed feedback using Gemini AI
+- 🤖 **AI-Powered Insights**: Generate detailed feedback using Gemini AI
 
-📝 Interview Questions: Create 5–7 technical interview questions with answers
+- 📝 **Interview Questions**: Create 5-7 technical interview questions with answers
 
-💼 Job Matching: Analyze resume compatibility with job descriptions
+- 💼 **Job Matching**: Analyze resume compatibility with job descriptions
 
-📧 Email Delivery: Automatically send results via email
+- 📧 **Email Delivery**: Automatically send results via email
 
-📎 Downloadable: DOCX + HTML attachments
+- 📎 **Downloadable**: DOCX + HTML attachments
 
-✅ Just provide your resume + job info – the agent does the rest!
-
-
-
----
-
-🏗️ Architecture
-
-n8n: Workflow automation platform
-
-Flask API: Resume processing and document generation
-
-Gemini AI: Content analysis and generation
-
-Docker: Containerized deployment
-
+-  ✅ Just provide your resume + job info – the agent does the rest!
 
 
 ---
 
-🚀 How to Use (Cloud Version – Recommended)
+## 🏗️ Architecture
 
-🔧 Prerequisites
+- **n8n**: Workflow automation platform
 
-Python 3.9+
+- **Flask API**: Resume processing and document generation
+
+- **Gemini AI**: Content analysis and generation
+
+- **Docker**: Containerized deployment
+
+
+---
+
+## 🚀 How to Use (Cloud Version – Recommended)
+
+## 🔧 Prerequisites
+
+- Python 3.9+
 
 
 1. 📥 Clone This Repository
@@ -81,60 +79,43 @@ Once submitted, you'll receive an email with full analysis + attachments.
 
 ---
 
-🔒 Security
+## 📋 Usage
 
-This agent uses a Webhook with Token Authentication to secure access:
+### 📥 Input Requirements
 
-Your requests must include a valid x-token header
+- **Resume file**: PDF or DOCX format
 
-The token should be private and never exposed in UI/code
+- **Email address**: To receive results
 
-Only the creator knows the token
+- **Job link**: URL to job posting
 
-If the token is invalid or missing, the request will be rejected
+- **Company link (optional)**: Company website
 
-
-
----
-
-📋 Usage
-
-📥 Input Requirements
-
-Resume file: PDF or DOCX format
-
-Email address: To receive results
-
-Job link: URL to job posting
-
-Company link (optional): Company website
-
-LinkedIn profile (optional): Your LinkedIn URL
+- **LinkedIn profile (optional)**: Your LinkedIn URL
 
 
-📤 Output
+### 📤 Output
 
 You'll receive an email with:
 
-📊 Detailed resume analysis
+- 📊 Detailed resume analysis
 
-💡 Improvement recommendations
+- 💡 Improvement recommendations
 
-❓ 5–7 technical interview questions with answers
+- ❓ 5–7 technical interview questions with answers
 
-🎯 Job matching insights (if job link provided)
+- 🎯 Job matching insights (if job link provided)
 
-📎 Complete analysis as a Word document attachment
+- 📎 Complete analysis as a Word document attachment
 
-📄 HTML analysis of the resume and job
+- 📄 HTML analysis of the resume and job
 
-🧩 Categorized insights (skills, tools, company match)
-
+- 🧩 Categorized insights (skills, tools, company match)
 
 
 ---
 
-🧪 Sample Request Structure
+## 🧪 Sample Request Structure
 
 {
   "email": "you@example.com",
@@ -149,9 +130,9 @@ You'll receive an email with:
 
 ---
 
-🛠️ Development
+## 🛠️ Development
 
-🔄 Project Structure
+### 🔄 Project Structure
 
 interview-prep-automation/
 ├── README.md
@@ -165,7 +146,7 @@ interview-prep-automation/
 
 ---
 
-🌐 Service Overview
+## 🌐 Service Overview
 
 Service	Description	Hosted At
 
@@ -174,47 +155,44 @@ Service	Description	Hosted At
 🔗 Webhook	Trigger via n8n + validate requests	https://hadasbenmoshe.app.n8n.cloud/...
 
 
+---
+
+## ⚙️ API Endpoints (For Reference)
+The Flask API provides these endpoints:
+
+You don't need to host these – already deployed.
+
+- 'POST /extract_resume': Extracts text from uploaded resume
+
+- 'POST /generate_docx': Generates a formatted Word document
 
 ---
 
-⚙️ API Endpoints (For Reference)
+## 🔍 Troubleshooting
 
-These are pre-hosted, you don’t need to run them:
+### Common Issues
 
-POST /extract_resume: Extracts text from uploaded resume
+**1. Webhook not working**
 
-POST /generate_docx: Generates a formatted Word document
+- Check the webhook URL in send_to_n8n.py
 
+- Ensure n8n workflow is activated
 
-
----
-
-🔍 Troubleshooting
-
-Common Issues
-
-1. Webhook not working
-
-Check the webhook URL in send_to_n8n.py
-
-Ensure n8n workflow is activated
-
-Verify webhook ID matches
+- Verify webhook ID matches
 
 
-2. File processing errors
+**2. File processing errors**
 
-Ensure resume is in PDF or DOCX format
+- Ensure resume is in PDF or DOCX format
 
-Check file size limits
+- Check file size limits
 
-Verify file is not corrupted
-
+- Verify file is not corrupted
 
 
 ---
 
-📣 Want to Share?
+## 📣 Want to Share?
 
 After running successfully, feel free to share your results or write your own post!
 This agent is especially helpful for:
@@ -229,25 +207,24 @@ This agent is especially helpful for:
 
 ---
 
-📄 License
+## 📄 License
 
-This project is licensed under the MIT License – see the LICENSE file for details.
-
-
----
-
-🙏 Acknowledgments
-
-n8n – Workflow automation
-
-Google Gemini – AI capabilities
-
-python-docx – Document generation
-
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
 ---
 
-Made with ❤️ to help you shine in your next interview
+## 🙏 Acknowledgments
+
+- [n8n](https://n8n.io/) for workflow automation
+
+- [Google Gemini](https://ai.google.dev/) for AI capabilities
+
+- [python-docx](https://python-docx.readthedocs.io/) for document generation
+
+
+---
+
+**Made with ❤️ to help you shine in your next interview**
 
 ---
