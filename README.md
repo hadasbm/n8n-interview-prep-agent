@@ -96,7 +96,7 @@ Once submitted, you'll receive an email with full analysis + attachments.
 
 ### 📤 Output
 
-You'll receive an email with:
+**You'll receive an email with**:
 
 - 📊 Detailed resume analysis
 
@@ -133,16 +133,16 @@ You'll receive an email with:
 ## 🛠️ Development
 
 ### 🔄 Project Structure
-
+```
 interview-prep-automation/
 ├── README.md
-├── Dockerfile                     # n8n container
-├── Dockerfile.resume-api         # Flask API container
-├── send_to_n8n.py                # Client script (edit + run)
-├── resume_api.py                 # Flask API for resume handling (pre-hosted)
-├── requirements.txt              # Python dependencies
-└── local/                        # Optional: Local-only files (e.g. docker-compose.yml)
-
+├── Dockerfile                    # n8n container
+├── Dockerfile.resume-api        # Flask API container
+├── send_to_n8n.py              # Client script (edit + run)
+├── resume_api.py                       # Flask API for resume handling (pre-hosted)
+├── requirements.txt             # Python dependencies
+└── (Optional) local/           # Local-only files (e.g. docker-compose.yml)
+```
 
 ---
 
