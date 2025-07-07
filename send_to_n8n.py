@@ -18,11 +18,9 @@ data = {
     'resumeMimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  #for PDF use: application/pdf
 }
 
-response = requests.post(url, json=data)
-print("Status:", response.status_code)
-print("Response:", response.text)
-
-if response.status_code == 200:
+try:
+    resp = requests.post(url, json=payload, timeout=120)
+    resp.raise_for_status()
     print(f"✅ הניתוח נשלח למייל: {email}")
-else:
-    print("❌ שגיאה בשליחה")
+except requests.HTTPError as e:
+    print("❌ שגיאה:", resp.status_code, resp.text)

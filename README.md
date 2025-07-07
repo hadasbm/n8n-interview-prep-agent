@@ -10,13 +10,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 - 💼 **Job Matching**: Analyze resume compatibility with job descriptions
 - 📧 **Email Delivery**: Automatically send results via email
 - 📎 **Downloadable**: DOCX + HTML attachments
-
-## ✨ Features
-🧠 AI-powered resume analysis using Gemini
-📝 Tailored interview questions (15+)
-🔍 Job-to-resume matching & insights
-📧 Output sent via email (DOCX + HTML)
-✅ Just provide your resume + job info – the agent does the rest!
+-  ✅ Just provide your resume + job info – the agent does the rest!
 
 
 ## 🏗️ Architecture
