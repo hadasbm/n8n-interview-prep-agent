@@ -148,11 +148,11 @@ interview-prep-automation/
 
 ## 🌐 Service Overview
 
-Service	Description	Hosted At
-
-🧠 Gemini AI	Resume analysis & content gen.	Google Gemini API
-🧰 Flask API	Extract text, generate DOCX	Render (hidden – managed by maintainer)
-🔗 Webhook	Trigger via n8n + validate requests	https://hadasbenmoshe.app.n8n.cloud/...
+| Service       | Description                          | Hosted At                                         |
+|---------------|--------------------------------------|--------------------------------------------------|
+| 🧠 Gemini AI  | Resume analysis & content gen.       | Google Gemini API                                |
+| 🧰 Flask API  | Extract text, generate DOCX          | Render (hidden – managed by maintainer)          |
+| 🔗 Webhook    | Trigger via n8n + validate           | https://hadasbenmoshe.app.n8n.cloud/...          |
 
 
 ---
