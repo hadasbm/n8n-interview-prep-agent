@@ -48,33 +48,33 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 1. 📥 Clone This Repository
 
-git clone https://github.com/your-username/interview-prep-agent  
-cd interview-prep-agent
+    git clone https://github.com/your-username/interview-prep-agent  
+    cd interview-prep-agent
 
 2. ✏️ Edit the Python Client Script
 
-Open send_to_n8n.py and update the placeholders:
+    Open send_to_n8n.py and update the placeholders:
 
-email = "your@email.com"
+    email = "your@email.com"
 
-with open(r"<PATH-TO-YOUR-RESUME>", "rb") as file:
-    encoded_file = base64.b64encode(file.read()).decode("utf-8")
+    with open(r"<PATH-TO-YOUR-RESUME>", "rb") as file:
+        encoded_file = base64.b64encode(file.read()).decode("utf-8")
 
-data = {
-    "email": email,
-    "jobLink": "<URL to job posting>",
-    "companyLink": "<URL to company site>",
-    "linkedinProfile": "<LinkedIn profile URL>",
-    "resume": encoded_file,
-    "resumeFilename": "MyResume.docx",
-    "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-}
+    data = {
+        "email": email,
+        "jobLink": "<URL to job posting>",
+        "companyLink": "<URL to company site>",
+        "linkedinProfile": "<LinkedIn profile URL>",
+        "resume": encoded_file,
+        "resumeFilename": "MyResume.docx",
+        "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    }
 
 3. ▶️ Run the Script
 
-python den_to_n8n.py
+    python den_to_n8n.py
 
-Once submitted, you'll receive an email with full analysis + attachments.
+    Once submitted, you'll receive an email with full analysis + attachments.
 
 
 ---
