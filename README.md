@@ -41,6 +41,12 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 ## 🚀 How to Use (Cloud Version – Recommended)
 
+## 🎬 Demo
+
+![Demo]<video src="assets/interview_prep_demo.mp4" controls width="600"></video>
+![n8n Workflow](assets/n8n-workflow.png)  
+![Render Log](assets/render-server.png)
+
 ## 🔧 Prerequisites
 
 - Python 3.9+
