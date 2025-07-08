@@ -44,7 +44,9 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 ## 🎬 Demo
 
 ![Demo](assets/interview_prep_gif.gif)
+
 ![n8n Workflow](assets/n8n-workflow.png)  
+
 ![Render Log](assets/render-server.png)
 
 ## 🔧 Prerequisites
