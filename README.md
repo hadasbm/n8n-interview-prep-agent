@@ -39,7 +39,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 ---
 
-## 🚀 How to Use (Cloud Version – Recommended)
+## 🚀 How to Use
 
 ## 🎬 Demo
 
