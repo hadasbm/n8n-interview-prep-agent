@@ -3,12 +3,11 @@ import base64
 
 email = "<YOUR-EMAIL>"
 
-with open(r"<YOUR-PATH-TO-CV>", 'rb') as file:
-    file_content = file.read()
-    encoded_file = base64.b64encode(file_content).decode('utf-8')
+with open(r"<YOUR-PATH-TO-CV>", "rb") as file:
+    encoded_file = base64.b64encode(file.read()).decode()
 
 url = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep" #dont change!
-data = {
+payload = {
     'email': email,
     'jobLink': '<PATH-TO-JOB>',
     'companyLink': '<PATH-TO-COMPANY>',
