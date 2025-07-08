@@ -165,6 +165,12 @@ interview-prep-automation/
 
 ---
 
+## 🧠 Keep Render Server Awake
+
+To prevent delays from Render's free-tier server going to sleep, a **secondary n8n workflow** pings the Flask API every 10 minutes. This keeps the service warm and responsive at all times – even without user interaction. No external uptime monitor is needed – it's all handled serverlessly inside n8n.
+
+---
+
 ## ⚙️ API Endpoints (For Reference)
 The Flask API provides these endpoints:
 
