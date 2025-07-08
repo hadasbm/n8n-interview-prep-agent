@@ -1,9 +1,6 @@
----
-
 # 🎯 Interview Prep Automation
 
 An intelligent automation system that analyzes resumes and generates comprehensive interview preparation documents using AI.
-
 
 ---
 
@@ -23,7 +20,6 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 -  ✅ Just provide your resume + job info – the agent does the rest!
 
-
 ---
 
 ## 🏗️ Architecture
@@ -35,7 +31,6 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 - **Gemini AI**: Content analysis and generation
 
 - **Docker**: Containerized deployment
-
 
 ---
 
@@ -51,8 +46,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 ## 🔧 Prerequisites
 
-- Python 3.9+
-
+- Python 3.9+ - This script depends on 'requests', whiich you can install via `pip install requests`
 
 1. 📥 Clone This Repository
 
@@ -63,6 +57,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
     Open send_to_n8n.py and update the placeholders:
 
+```
     email = "your@email.com"
 
     with open(r"<PATH-TO-YOUR-RESUME>", "rb") as file:
@@ -77,13 +72,13 @@ An intelligent automation system that analyzes resumes and generates comprehensi
         "resumeFilename": "MyResume.docx",
         "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     }
+```
 
 3. ▶️ Run the Script
 
-    python den_to_n8n.py
+    `python den_to_n8n.py`
 
     Once submitted, you'll receive an email with full analysis + attachments.
-
 
 ---
 
@@ -100,7 +95,6 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 - **Company link (optional)**: Company website
 
 - **LinkedIn profile (optional)**: Your LinkedIn URL
-
 
 ### 📤 Output
 
@@ -120,7 +114,6 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 - 🧩 Categorized insights (skills, tools, company match)
 
-
 ---
 
 ## 🧪 Sample Request Structure
@@ -134,7 +127,6 @@ An intelligent automation system that analyzes resumes and generates comprehensi
   "resumeFilename": "your_cv.docx",
   "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 }
-
 
 ---
 
@@ -217,14 +209,11 @@ This agent is especially helpful for:
 
 🧪 Analyzing job fit based on actual roles
 
-
-
 ---
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 
 ---
 
@@ -236,9 +225,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [python-docx](https://python-docx.readthedocs.io/) for document generation
 
-
 ---
 
 **Made with ❤️ to help you shine in your next interview**
-
----
