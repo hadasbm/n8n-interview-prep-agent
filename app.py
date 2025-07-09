@@ -15,7 +15,7 @@ st.markdown(
         🤖 AI Interview-Prep Agent
     </h1>
     <h4 style='text-align:center;
-               color:#2BB0B6;
+               color:#505050;
                margin-top:-0.6rem;
                font-weight:500;'>
         Resume ➜ Insights ➜ Perfect Interview 🚀
