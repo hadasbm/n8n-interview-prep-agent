@@ -6,6 +6,7 @@ WEBHOOK_URL = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep"
 
 st.set_page_config(page_title="Interview-Prep AI", page_icon=":rocket:")
 
+# --- כותרת ---
 st.markdown(
     """
     <h1 style='text-align:center;
@@ -23,6 +24,18 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# --- CSS לכפתור ---
+st.markdown("""
+<style>
+div.stButton > button:first-child {
+    background-color:#2BB0B6; color:white; border-radius:8px;
+}
+div.stButton > button:first-child:hover {
+    background-color:#21969B;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.info(
     "Your AI agent for interview prep – upload your resume, add links, and receive smart insights & interview questions straight to your inbox."
