@@ -29,10 +29,28 @@ st.markdown(
 st.markdown("""
 <style>
 div.stButton > button:first-child {
-    background-color:#2BB0B6; color:white; border-radius:8px;
+    background: linear-gradient(90deg,#00b2c3,#27d6b0);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 30px;
+    padding: 0.6em 2.5em;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transition: all 0.25s ease-in-out;
 }
+
+/* אפקט-Hover */
 div.stButton > button:first-child:hover {
-    background-color:#21969B;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.20);
+}
+
+/* אפקט-Active (לחיצה) */
+div.stButton > button:first-child:active {
+    transform: translateY(0px) scale(0.98);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
 }
 </style>
 """, unsafe_allow_html=True)
