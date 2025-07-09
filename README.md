@@ -8,7 +8,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 > 🧹 ℹ️ Repo history was reset on July 9, 2025 to remove sensitive files from early commits.
 > If you've forked or cloned before this date – please pull the latest or re-clone. 
-> git fetch --all && git reset --hard origin/main.
+> `git fetch --all && git reset --hard origin/main`.
 
 ---
 
@@ -57,17 +57,18 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 ## 🔧 Prerequisites
 
 - Python 3.9+
-- python pacakages - using pip install requirements.txt
+- python pacakages - using `pip install requirements.txt`
 
 
 1. 📥 Clone This Repository
-
+```
     git clone https://github.com/your-username/interview-prep-agent  
     cd interview-prep-agent
-
+```
 2. ✏️ Edit the Python Client Script
 
     Open send_to_n8n.py and update the placeholders:
+   ```
 
     email = "your@email.com"
 
@@ -83,8 +84,9 @@ An intelligent automation system that analyzes resumes and generates comprehensi
         "resumeFilename": "MyResume.docx",
         "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     }
+   ```
 
-3. ▶️ Run the Script
+4. ▶️ Run the Script
 
     python send_to_n8n.py
 
@@ -130,7 +132,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 ---
 
 ## 🧪 Sample Request Structure
-
+```
 {
   "email": "you@example.com",
   "jobLink": "https://company.com/jobs/123",
@@ -140,7 +142,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
   "resumeFilename": "your_cv.docx",
   "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 }
-
+```
 
 ---
 
