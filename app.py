@@ -6,18 +6,23 @@ WEBHOOK_URL = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep"
 
 st.set_page_config(page_title="Interview-Prep AI", page_icon=":rocket:")
 
-st.markdown("""
-<style>
-div.stButton > button:first-child {
-    background-color:#4F8BF9; color:white; border-radius:8px; height:3em;
-}
-div.stButton > button:hover { background-color:#3c6dd8; }
-</style>
-
-<h1 style='text-align:center; color:#4F8BF9;'>
-  🤖 AI Interview-Prep Agent
-</h1>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <h1 style='text-align:center;
+               color:#47c9e5;
+               font-size:2.6rem;
+               text-shadow: 1px 1px 2px rgba(0,0,0,0.25);'>
+        🤖 AI Interview-Prep Agent
+    </h1>
+    <h4 style='text-align:center;
+               color:#a64ef4;
+               margin-top:-0.6rem;
+               font-weight:500;'>
+        Resume ➜ Insights ➜ Perfect Interview 🚀
+    </h4>
+    """,
+    unsafe_allow_html=True
+)
 
 st.info(
     "Your AI agent for interview prep – upload your resume, add links, and receive smart insights & interview questions straight to your inbox."
