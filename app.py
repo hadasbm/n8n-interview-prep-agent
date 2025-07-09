@@ -19,6 +19,10 @@ div.stButton > button:hover { background-color:#3c6dd8; }
 </h1>
 """, unsafe_allow_html=True)
 
+st.info(
+    "Your AI agent for interview prep – upload your resume, add links, and receive smart insights & interview questions straight to your inbox."
+)
+
 email  = st.text_input("📧 Email")
 job    = st.text_input("🔗 Job Link")
 comp   = st.text_input("🏢 Company Link")
