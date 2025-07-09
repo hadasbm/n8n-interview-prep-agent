@@ -9,13 +9,13 @@ st.set_page_config(page_title="Interview-Prep AI", page_icon=":rocket:")
 st.markdown(
     """
     <h1 style='text-align:center;
-               color:#47c9e5;
+               color:#2BB0B6;
                font-size:2.6rem;
                text-shadow: 1px 1px 2px rgba(0,0,0,0.25);'>
         🤖 AI Interview-Prep Agent
     </h1>
     <h4 style='text-align:center;
-               color:#a64ef4;
+               color:#2BB0B6;
                margin-top:-0.6rem;
                font-weight:500;'>
         Resume ➜ Insights ➜ Perfect Interview 🚀
