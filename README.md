@@ -57,6 +57,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 ## 🔧 Prerequisites
 
 - Python 3.9+
+- python pacakages - using pip install requirements.txt
 
 
 1. 📥 Clone This Repository
