@@ -1,20 +1,26 @@
 import requests
 import base64
+import mimetypes
 
 email = "<YOUR-EMAIL>"
 
-with open(r"<YOUR-PATH-TO-CV>", "rb") as file:
+cv_path = "<YOUR-PATH-TO-CV>"
+
+with open(cv_path, "rb") as file:
     encoded_file = base64.b64encode(file.read()).decode()
 
-url = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep" #dont change!
+# Automatically determine MIME type from file extension
+resume_mime_type = mimetypes.guess_type(cv_path)[0] or "application/octet-stream"
+
+url = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep" #don't change!
 payload = {
     'email': email,
     'jobLink': '<PATH-TO-JOB>',
     'companyLink': '<PATH-TO-COMPANY>',
     'linkedinProfile': '<PATH-TO-LINKEDIN-PROFILE>',
     'resume': encoded_file,
-    'resumeFilename': '<CV-FILE-NAME>', #(optional)
-    'resumeMimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  #for PDF use: application/pdf
+    'resumeFilename': '<CV-FILE-NAME>', #(optional - if not provided, the file name will be used)
+    'resumeMimeType': resume_mime_type  # automatically determined from file extension
 }
 
 try:
