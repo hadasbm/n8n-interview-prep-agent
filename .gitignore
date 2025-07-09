@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# VSCode
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints
+
+# System
+.DS_Store
+Thumbs.db
+
+# Docker
+local/
+*.env
+
+# GitHub Actions
+.github/workflows/*.secret.*
