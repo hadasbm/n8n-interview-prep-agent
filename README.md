@@ -4,6 +4,11 @@
 
 An intelligent automation system that analyzes resumes and generates comprehensive interview preparation documents using AI.
 
+---
+
+> 🧹 ℹ️ Repo history was reset on July 9, 2025 to remove sensitive files from early commits.
+> If you've forked or cloned before this date – please pull the latest or re-clone. 
+> git fetch --all && git reset --hard origin/main.
 
 ---
 
