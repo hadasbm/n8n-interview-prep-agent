@@ -131,6 +131,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
 
 ## 🧪 Sample Request Structure
 
+```JSON
 {
   "email": "you@example.com",
   "jobLink": "https://company.com/jobs/123",
@@ -140,7 +141,7 @@ An intelligent automation system that analyzes resumes and generates comprehensi
   "resumeFilename": "your_cv.docx",
   "resumeMimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 }
-
+```
 
 ---
 
