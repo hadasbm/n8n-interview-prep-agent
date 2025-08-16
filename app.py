@@ -6,7 +6,7 @@ WEBHOOK_URL = "https://hadasbenmoshe.app.n8n.cloud/webhook/interview-prep"
 
 st.set_page_config(page_title="Interview-Prep AI", page_icon=":rocket:")
 
-# --- כותרת ---
+# --- Title ---
 st.markdown(
     """
     <h1 style='text-align:center;
@@ -25,7 +25,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- CSS לכפתור ---
+# --- CSS for Button ---
 st.markdown("""
 <style>
 div.stButton > button:first-child {
@@ -41,13 +41,13 @@ div.stButton > button:first-child {
     transition: all 0.25s ease-in-out;
 }
 
-/* אפקט-Hover */
+/* Hover effect */
 div.stButton > button:first-child:hover {
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 6px 12px rgba(0,0,0,0.20);
 }
 
-/* אפקט-Active (לחיצה) */
+/* Active (Click) effect */
 div.stButton > button:first-child:active {
     transform: translateY(0px) scale(0.98);
     box-shadow: 0 3px 6px rgba(0,0,0,0.12);
